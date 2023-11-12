@@ -1,5 +1,7 @@
 # BinkyBox
 
+![Binky](icons/binky.ico)
+
 ## The Problem
 
 Windows 10 [introduced virtual desktop support in 2015](https://www.pcworld.com/article/1936035/virtual-desktops-more-space-and-order-with-windows-10-and-11.html). This led to the obsolescence of third-party virtual desktop software, which is a problem, since Windows's native virtual desktop support lacks two very important features:
