@@ -58,6 +58,14 @@ cargo build --release
 
 The `.exe` will be in `target/release`.
 
+## Adding to Windows Startup
+
+You can make BinkyBox start automatically on Windows startup when you log in:
+
+1. Create a shortcut for `binkybox.exe` by right-clicking it.
+2. Press _Win+R_ to open Run, and type in `shell:common startup`.
+3. Paste the BinkyBox shortcut you created in Step 1 inside the resulting Startup folder.
+
 ## License and Author
 
 License: MIT. Author: [Nadim Kobeissi](https://nadim.computer)
