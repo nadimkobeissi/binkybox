@@ -20,7 +20,7 @@ Not only is this ridiculous, but there's no way to add additional shortcuts with
 
 **BinkyBox** lets you _hop_ from one desktop to another via keyboard shortcuts and adds a useful system tray icon so you know which desktop you're on. The logo is a cute bunny because bunnies hop. Like you're hopping from one desktop to another. Using keyboard shortcuts. Let's all hop together using BinkyBox.
 
-A "binky" is a word for [a kind of happy hop that bunnies do](https://be.chewy.com/is-this-normal-why-do-rabbits-binky/).
+A "binky" is a word for [a kind of happy hop that bunnies do](https://www.youtube.com/watch?v=y0ivoIr_xnQ).
 
 ### Incredible Features:
 
