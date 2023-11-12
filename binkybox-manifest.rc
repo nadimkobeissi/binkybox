@@ -1,3 +1,4 @@
+icon ICON "icons/binky.ico"
 binky ICON "icons/binky.ico"
 num_1 ICON "icons/num_1.ico"
 num_2 ICON "icons/num_2.ico"

@@ -15,7 +15,7 @@ impl MainWindow {
 	pub fn new() -> Self {
 		let wnd = gui::WindowMain::new(gui::WindowMainOpts {
 			title: "BinkyBox Settings".to_owned(),
-			class_icon: gui::Icon::Str(winsafe::WString::from_str("binky")),
+			class_icon: gui::Icon::Str(winsafe::WString::from_str("icon")),
 			size: (300, 500),
 			style: gui::WindowMainOpts::default().style | co::WS::MINIMIZEBOX,
 			..Default::default()

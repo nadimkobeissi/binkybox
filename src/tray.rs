@@ -17,7 +17,7 @@ pub enum TrayMessage {
 pub fn init(tx: mpsc::SyncSender<TrayMessage>, rx: mpsc::Receiver<TrayMessage>) {
 	let mut tray = TrayItem::new(
 		"BinkyBox",
-		IconSource::Resource("binky"),
+		IconSource::Resource("icon"),
 	)
 	.unwrap();
 

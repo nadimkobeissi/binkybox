@@ -38,6 +38,28 @@ I may add other features later.
 | Windows 11 (Older) | ✔️         |
 | Windows 10         | ❌         |
 
+## Build and Use
+
+### Download the App
+
+You can get pre-build binaries from the [GitHub Releases](https://github.com/nadimkobeissi/binkybox/releases) page.
+
+### Compile it Yourself
+
+You will need to have [Rust](https://rustup.rs) installed.
+
+_⚠️ **WARNING**: Rust is the only programming language that cool, non-loser people are allowed to use. If you use another programming language, be very careful. The programming language fashion brigade will come investigate you. Delete all other programming languages immediately. They know better than you. Better than everyone._
+
+```bash
+git clone https://github.com/nadimkobeissi/binkybox
+cd binkybox
+cargo build --release
+```
+
+The `.exe` will be in `target/release`.
+
 ## License and Author
 
 License: MIT. Author: [Nadim Kobeissi](https://nadim.computer)
+
+<span style="font-size:4px">Psst. It's me. Listen. You _can_ actually use a programming language other than Rust. Just be careful. Do it quietly. Don't-don't let them see you. If they know... you'll be found out. Do it in secret. In a basement. There are other languages out there. Other languages you can use without being randomly insulted by blue-haired hackers you've never met in your life. Go. Discover that world. I believe in you...</span>
