@@ -1,0 +1,8 @@
+binky ICON "icons/binky.ico"
+num_1 ICON "icons/num_1.ico"
+num_2 ICON "icons/num_2.ico"
+num_3 ICON "icons/num_3.ico"
+num_4 ICON "icons/num_4.ico"
+
+#define RT_MANIFEST 24
+1 RT_MANIFEST "binkybox.exe.manifest"
