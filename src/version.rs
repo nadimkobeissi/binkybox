@@ -2,5 +2,5 @@
  * SPDX-License-Identifier: MIT */
 
 pub fn version() -> &'static str {
-	"0.1.0"
+	"0.1.1"
 }
