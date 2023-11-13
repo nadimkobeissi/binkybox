@@ -4,41 +4,33 @@
 use std::sync::mpsc;
 use tray_item::{IconSource, TrayItem};
 
-mod gui;
+use crate::gui;
 pub enum TrayMessage {
 	Settings,
 	Quit,
 	SetIcon1,
 	SetIcon2,
 	SetIcon3,
-	SetIcon4
+	SetIcon4,
 }
 
 pub fn init(tx: mpsc::SyncSender<TrayMessage>, rx: mpsc::Receiver<TrayMessage>) {
-	let mut tray = TrayItem::new(
-		"BinkyBox",
-		IconSource::Resource("icon"),
-	)
-	.unwrap();
-
-	let tx2 = tx.clone();
-
+	let mut tray = TrayItem::new("BinkyBox", IconSource::Resource("icon")).unwrap();
+	let tx_0 = tx.clone();
+	let tx_1 = tx.clone();
 	tray.add_menu_item("Settings", move || {
 		tx.send(TrayMessage::Settings).unwrap();
 	})
 	.unwrap();
-
 	tray.inner_mut().add_separator().unwrap();
-
 	tray.add_menu_item("Quit", move || {
-		tx2.send(TrayMessage::Quit).unwrap();
+		tx_0.send(TrayMessage::Quit).unwrap();
 	})
 	.unwrap();
-
 	loop {
 		match rx.recv() {
 			Ok(TrayMessage::Settings) => {
-				gui::init();
+				gui::init(tx_1.clone());
 			}
 			Ok(TrayMessage::Quit) => {
 				std::process::exit(0);

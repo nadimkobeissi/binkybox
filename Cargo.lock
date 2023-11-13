@@ -53,6 +53,7 @@ version = "0.1.0"
 dependencies = [
  "embed-resource",
  "inputbot",
+ "json",
  "regex",
  "tokio",
  "tray-item",
@@ -353,6 +354,12 @@ checksum = "b2b3ea6ff95e175473f8ffe6a7eb7c00d054240321b84c57051175fe3c1e075e"
 dependencies = [
  "libc",
 ]
+
+[[package]]
+name = "json"
+version = "0.12.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "078e285eafdfb6c4b434e0d31e8cfcb5115b651496faca5749b88fafd4f23bfd"
 
 [[package]]
 name = "libc"

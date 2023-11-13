@@ -1,10 +1,17 @@
 /* SPDX-FileCopyrightText: © 2023 Nadim Kobeissi <nadim@symbolic.software>
  * SPDX-License-Identifier: MIT */
 
+use json::object;
+use std::sync::mpsc;
 use winsafe::{self as w, co, gui, prelude::*};
 
-mod util;
+use crate::config;
+use crate::keys;
+use crate::tray;
+use crate::util;
+use crate::version;
 
+#[allow(dead_code)]
 #[derive(Clone)]
 pub struct MainWindow {
 	wnd: gui::WindowMain,
@@ -12,31 +19,29 @@ pub struct MainWindow {
 }
 
 impl MainWindow {
-	pub fn new() -> Self {
+	pub fn new(tx: mpsc::SyncSender<tray::TrayMessage>) -> Self {
 		let wnd = gui::WindowMain::new(gui::WindowMainOpts {
 			title: "BinkyBox Settings".to_owned(),
 			class_icon: gui::Icon::Str(winsafe::WString::from_str("icon")),
-			size: (300, 500),
+			size: (300, 350),
 			style: gui::WindowMainOpts::default().style | co::WS::MINIMIZEBOX,
 			..Default::default()
 		});
-
 		let tab_ctrl = gui::Tab::new(
 			&wnd,
 			gui::TabOpts {
 				position: (10, 10),
-				size: (280, 480),
+				size: (280, 330),
 				items: vec![
 					(
 						"Keyboard Shortcuts".to_owned(),
-						Box::new(TabContainerKeyboardShortcuts::new(&wnd)),
+						Box::new(TabContainerKeyboardShortcuts::new(&wnd, tx)),
 					),
 					("About".to_owned(), Box::new(TabContainerAbout::new(&wnd))),
 				],
 				..Default::default()
 			},
 		);
-
 		let new_self = Self { wnd, tab_ctrl };
 		new_self.events();
 		new_self
@@ -49,28 +54,21 @@ impl MainWindow {
 	fn events(&self) {}
 }
 
-fn run_app() -> w::AnyResult<i32> {
-	MainWindow::new().run().map_err(|err| err.into())
-}
-
+#[allow(dead_code)]
 #[derive(Clone)]
 pub struct TabContainerKeyboardShortcuts {
 	wnd: gui::WindowControl,
+	tx: mpsc::SyncSender<tray::TrayMessage>,
 	lbl_0: gui::Label,
 	txt_0: gui::Edit,
-	btn_0: gui::Button,
-	
 	lbl_1: gui::Label,
 	txt_1: gui::Edit,
-	btn_1: gui::Button,
-
 	lbl_2: gui::Label,
 	txt_2: gui::Edit,
-	btn_2: gui::Button,
-
 	lbl_3: gui::Label,
 	txt_3: gui::Edit,
-	btn_3: gui::Button,
+	btn_set: gui::Button,
+	btn_help: gui::Button,
 }
 
 impl GuiTab for TabContainerKeyboardShortcuts {
@@ -80,7 +78,8 @@ impl GuiTab for TabContainerKeyboardShortcuts {
 }
 
 impl TabContainerKeyboardShortcuts {
-	pub fn new(parent: &impl GuiParent) -> Self {
+	pub fn new(parent: &impl GuiParent, tx: mpsc::SyncSender<tray::TrayMessage>) -> Self {
+		let my_config = config::read();
 		let wnd = gui::WindowControl::new(
 			parent,
 			gui::WindowControlOpts {
@@ -88,7 +87,6 @@ impl TabContainerKeyboardShortcuts {
 				..Default::default()
 			},
 		);
-
 		let lbl_0 = gui::Label::new(
 			&wnd,
 			gui::LabelOpts {
@@ -97,169 +95,164 @@ impl TabContainerKeyboardShortcuts {
 				..Default::default()
 			},
 		);
-
 		let txt_0 = gui::Edit::new(
 			&wnd,
 			gui::EditOpts {
 				position: (20, 40),
 				width: 180,
-				text: "Ctrl+Alt+1".to_owned(),
-				edit_style: co::ES::READONLY,
+				text: my_config["shortcuts"]["desktop_1"].to_string().to_owned(),
 				..Default::default()
 			},
 		);
-
-		let btn_0 = gui::Button::new(
-			&wnd,
-			gui::ButtonOpts {
-				position: (20, 70),
-				text: "Set".to_owned(),
-				..Default::default()
-			},
-		);
-
 		let lbl_1 = gui::Label::new(
 			&wnd,
 			gui::LabelOpts {
-				position: (20, 120),
+				position: (20, 80),
 				text: "Switch to Desktop 2".to_owned(),
 				..Default::default()
 			},
 		);
-
 		let txt_1 = gui::Edit::new(
 			&wnd,
 			gui::EditOpts {
-				position: (20, 140),
+				position: (20, 100),
 				width: 180,
-				text: "Ctrl+Alt+2".to_owned(),
-				edit_style: co::ES::READONLY,
+				text: my_config["shortcuts"]["desktop_2"].to_string().to_owned(),
 				..Default::default()
 			},
 		);
-
-		let btn_1 = gui::Button::new(
-			&wnd,
-			gui::ButtonOpts {
-				position: (20, 170),
-				text: "Set".to_owned(),
-				..Default::default()
-			},
-		);
-
 		let lbl_2 = gui::Label::new(
 			&wnd,
 			gui::LabelOpts {
-				position: (20, 220),
+				position: (20, 140),
 				text: "Switch to Desktop 3".to_owned(),
 				..Default::default()
 			},
 		);
-
 		let txt_2 = gui::Edit::new(
 			&wnd,
 			gui::EditOpts {
-				position: (20, 240),
+				position: (20, 160),
 				width: 180,
-				text: "Ctrl+Alt+3".to_owned(),
-				edit_style: co::ES::READONLY,
+				text: my_config["shortcuts"]["desktop_3"].to_string().to_owned(),
 				..Default::default()
 			},
 		);
-
-		let btn_2 = gui::Button::new(
-			&wnd,
-			gui::ButtonOpts {
-				position: (20, 270),
-				text: "Set".to_owned(),
-				..Default::default()
-			},
-		);
-
 		let lbl_3 = gui::Label::new(
 			&wnd,
 			gui::LabelOpts {
-				position: (20, 320),
+				position: (20, 200),
 				text: "Switch to Desktop 4".to_owned(),
 				..Default::default()
 			},
 		);
-
 		let txt_3 = gui::Edit::new(
 			&wnd,
 			gui::EditOpts {
-				position: (20, 340),
+				position: (20, 220),
 				width: 180,
-				text: "Ctrl+Alt+4".to_owned(),
-				edit_style: co::ES::READONLY,
+				text: my_config["shortcuts"]["desktop_4"].to_string().to_owned(),
 				..Default::default()
 			},
 		);
-
-		let btn_3 = gui::Button::new(
+		let btn_set = gui::Button::new(
 			&wnd,
 			gui::ButtonOpts {
-				position: (20, 370),
+				position: (20, 260),
+				width: 100,
 				text: "Set".to_owned(),
 				..Default::default()
 			},
 		);
-
+		let btn_help = gui::Button::new(
+			&wnd,
+			gui::ButtonOpts {
+				position: (150, 260),
+				width: 50,
+				text: "Help".to_owned(),
+				..Default::default()
+			},
+		);
 		let new_self = Self {
 			wnd,
-			lbl_0, txt_0, btn_0,
-			lbl_1, txt_1, btn_1,
-			lbl_2, txt_2, btn_2,
-			lbl_3, txt_3, btn_3,
+			tx,
+			lbl_0,
+			txt_0,
+			lbl_1,
+			txt_1,
+			lbl_2,
+			txt_2,
+			lbl_3,
+			txt_3,
+			btn_set,
+			btn_help,
 		};
 		new_self.events();
 		new_self
 	}
-
 	fn events(&self) {
-		let self0 = self.clone();
-		let self1 = self.clone();
-		let self2 = self.clone();
-		let self3 = self.clone();
-		self.btn_0.on().bn_clicked(move || {
+		let self_0 = self.clone();
+		self.btn_set.on().bn_clicked(move || {
+			for i in 0..4 {
+				let shortcut_sanitized = keys::sanitize_keyboard_shortcut(match i {
+					0 => self_0.txt_0.text(),
+					1 => self_0.txt_1.text(),
+					2 => self_0.txt_2.text(),
+					_ => self_0.txt_3.text(),
+				});
+				if !keys::check_keyboard_shortcut(shortcut_sanitized) {
+					w::task_dlg::error(
+						&self_0.wnd.hwnd().GetParent()?,
+						"Error",
+						None,
+						&format!(
+							"Keyboard shortcut for \"Switch to Desktop {}\" is invalid.",
+							i + 1
+						),
+					)?;
+					return Ok(());
+				}
+			}
+			self_0
+				.txt_0
+				.set_text(keys::sanitize_keyboard_shortcut(self_0.txt_0.text()).as_str());
+			self_0
+				.txt_1
+				.set_text(keys::sanitize_keyboard_shortcut(self_0.txt_1.text()).as_str());
+			self_0
+				.txt_2
+				.set_text(keys::sanitize_keyboard_shortcut(self_0.txt_2.text()).as_str());
+			self_0
+				.txt_3
+				.set_text(keys::sanitize_keyboard_shortcut(self_0.txt_3.text()).as_str());
+			config::write(object! {
+				shortcuts: {
+					desktop_1: self_0.txt_0.text(),
+					desktop_2: self_0.txt_1.text(),
+					desktop_3: self_0.txt_2.text(),
+					desktop_4: self_0.txt_3.text(),
+				}
+			})
+			.unwrap();
+			keys::bind_shortcuts(self_0.tx.clone());
 			w::task_dlg::info(
-				&self0.wnd.hwnd().GetParent()?,
-				"Work in progress",
+				&self_0.wnd.hwnd().GetParent()?,
+				"Success",
 				None,
-				"You can't set your own keyboard shortcuts yet.\nPlease use the defaults.",
+				"Keyboard shortcuts saved.",
 			)?;
 			Ok(())
 		});
-		self.btn_1.on().bn_clicked(move || {
-			w::task_dlg::info(
-				&self1.wnd.hwnd().GetParent()?,
-				"Work in progress",
-				None,
-				"You can't set your own keyboard shortcuts yet.\nPlease use the defaults.",
-			)?;
-			Ok(())
-		});
-		self.btn_2.on().bn_clicked(move || {
-			w::task_dlg::info(
-				&self2.wnd.hwnd().GetParent()?,
-				"Work in progress",
-				None,
-				"You can't set your own keyboard shortcuts yet.\nPlease use the defaults.",
-			)?;
-			Ok(())
-		});
-		self.btn_3.on().bn_clicked(move || {
-			w::task_dlg::info(
-				&self3.wnd.hwnd().GetParent()?,
-				"Work in progress",
-				None,
-				"You can't set your own keyboard shortcuts yet.\nPlease use the defaults.",
-			)?;
+		self.btn_help.on().bn_clicked(move || {
+			util::open_url(
+				"https://github.com/nadimkobeissi/binkybox#setting-keyboard-shortcuts",
+			);
 			Ok(())
 		});
 	}
 }
 
+#[allow(dead_code)]
 #[derive(Clone)]
 pub struct TabContainerAbout {
 	wnd: gui::WindowControl,
@@ -283,16 +276,14 @@ impl TabContainerAbout {
 				..Default::default()
 			},
 		);
-
 		let lbl_0 = gui::Label::new(
 			&wnd,
 			gui::LabelOpts {
 				position: (20, 20),
-				text: "BinkyBox 0.1.0".to_owned(),
+				text: format!("BinkyBox {}", version::version()).to_owned(),
 				..Default::default()
 			},
 		);
-
 		let lbl_1 = gui::Label::new(
 			&wnd,
 			gui::LabelOpts {
@@ -301,7 +292,6 @@ impl TabContainerAbout {
 				..Default::default()
 			},
 		);
-
 		let btn = gui::Button::new(
 			&wnd,
 			gui::ButtonOpts {
@@ -310,8 +300,12 @@ impl TabContainerAbout {
 				..Default::default()
 			},
 		);
-
-		let new_self = Self { wnd, lbl_0, lbl_1, btn };
+		let new_self = Self {
+			wnd,
+			lbl_0,
+			lbl_1,
+			btn,
+		};
 		new_self.events();
 		new_self
 	}
@@ -324,8 +318,12 @@ impl TabContainerAbout {
 	}
 }
 
-pub fn init() {
-	if let Err(e) = run_app() {
+fn show_gui(tx: mpsc::SyncSender<tray::TrayMessage>) -> w::AnyResult<i32> {
+	MainWindow::new(tx).run().map_err(|err| err.into())
+}
+
+pub fn init(tx: mpsc::SyncSender<tray::TrayMessage>) {
+	if let Err(e) = show_gui(tx) {
 		w::task_dlg::error(&w::HWND::NULL, "Unhandled error", None, &e.to_string())
 			.unwrap();
 	}

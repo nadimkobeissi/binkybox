@@ -24,9 +24,9 @@ A "binky" is a word for [a kind of happy hop that bunnies do](https://www.youtub
 
 ### Incredible Features:
 
-- Hop from one virtual desktop to another _directly_ using incredible keyboard shortcuts (_Ctrl+Alt+1_, _Ctrl+Alt+2_, etc.)
+- Hop from one virtual desktop to another _directly_ using incredible keyboard shortcuts.
 - See which virtual desktop you're on right now via a system tray icon.
-- Written in RUST! WOW! NERD POINTS! RUST!!!! VERY IMPORTANT THAT THIS SOFTWARE BE WRITTEN IN RUST. LOOK AT HOW SMART THIS SOFTWARE IS. RUST! THE ONLY LANGUAGE THAT PEOPLE ARE ALLOWED TO USE OTHERWISE THEY SUCK AT COMPUTER PROGRAMMING. RUST!!! FERRIS THE FERRIS WHEEL CRAB!! RUST!!!!!!!!!!!!!!!
+- Written in Rust, leading to very low (almost nonexistent) background resource usage.
 
 I may add other features later.
 
@@ -48,8 +48,6 @@ You can get pre-build binaries from the [GitHub Releases](https://github.com/nad
 
 You will need to have [Rust](https://rustup.rs) installed.
 
-_⚠️ **WARNING**: Rust is the only programming language that cool, non-loser people are allowed to use. If you use another programming language, be very careful. The programming language fashion brigade will come investigate you. Delete all other programming languages immediately. They know better than you. Better than everyone._
-
 ```bash
 git clone https://github.com/nadimkobeissi/binkybox
 cd binkybox
@@ -57,6 +55,17 @@ cargo build --release
 ```
 
 The `.exe` will be in `target/release`.
+
+## Setting Keyboard Shortcuts
+
+Right click the tray icon and open _Settings_ in order to set your own keyboard shortcuts. BinkyBox keyboard shortcuts follow this layout: `MODIFIER+OPTIONAL_MODIFIER+OPTIONAL_MODIFIER+OPTIONAL_MODIFIER+ALPHANUMERIC_CHAR`.
+
+The first modifier is required, and ending the sequence with an alphanumeric character is also required.
+
+- **Supported Modifiers**: `CAPSLOCK`, `LCTRL`, `RCTRL`, `LALT`, `RALT`, `LWIN`, `RWIN`, `LSHIFT`, `RSHIFT`
+- **Example Keyboard Shortcuts**: `LCTRL+LALT+1`, `CAPSLOCK+1`, `LWIN+LSHIFT+1`
+
+BinkyBox will reject keyboard shortcuts not specified using the layout above, so make sure you enter your keyboard shortcuts correctly. Keyboard shortcuts (and other settings) will be saved in a `binkybox.config.json` file located in the same directory as the BinkyBox executable.
 
 ## Adding to Windows Startup
 
@@ -69,5 +78,3 @@ You can make BinkyBox start automatically on Windows startup when you log in:
 ## License and Author
 
 License: MIT. Author: [Nadim Kobeissi](https://nadim.computer)
-
-<sup><sub>Psst. It's me. Listen. You _can_ actually use a programming language other than Rust. Just be careful. Do it quietly. Don't-don't let them see you. If they know... you'll be found out. Do it in secret. In a basement. There are other languages out there. Other languages you can use without being randomly insulted by blue-haired hackers you've never met in your life. Go. Discover that world. I believe in you...</sub></sup>
