@@ -61,7 +61,7 @@ pub fn sanitize_keyboard_shortcut(input: String) -> String {
 
 pub fn check_keyboard_shortcut(input: String) -> bool {
 	let re = Regex::new(
-		r"^(((CAPSLOCK)|([LR]CTRL)|([LR]ALT)|([LR]WIN)|([LR]SHIFT))\+){1,4}[A-Z\d]$",
+		r"^((|([LR]CTRL)|([LR]ALT)|([LR]WIN)|([LR]SHIFT))\+){1,4}[A-Z\d]$",
 	);
 	if re.is_err() {
 		return false;
@@ -71,7 +71,6 @@ pub fn check_keyboard_shortcut(input: String) -> bool {
 
 fn key_map() -> HashMap<&'static str, KeybdKey> {
 	[
-		("CAPSLOCK", CapsLockKey),
 		("CTRL", LControlKey),
 		("LCTRL", LControlKey),
 		("RCTRL", RControlKey),

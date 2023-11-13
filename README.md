@@ -62,8 +62,8 @@ Right click the tray icon and open _Settings_ in order to set your own keyboard 
 
 The first modifier is required, and ending the sequence with an alphanumeric character is also required.
 
-- **Supported Modifiers**: `CAPSLOCK`, `LCTRL`, `RCTRL`, `LALT`, `RALT`, `LWIN`, `RWIN`, `LSHIFT`, `RSHIFT`
-- **Example Keyboard Shortcuts**: `LCTRL+LALT+1`, `CAPSLOCK+1`, `LWIN+LSHIFT+1`
+- **Supported Modifiers**: `LCTRL`, `RCTRL`, `LALT`, `RALT`, `LWIN`, `RWIN`, `LSHIFT`, `RSHIFT`
+- **Example Keyboard Shortcuts**: `LCTRL+LALT+1`, `LWIN+LSHIFT+1`
 
 BinkyBox will reject keyboard shortcuts not specified using the layout above, so make sure you enter your keyboard shortcuts correctly. Keyboard shortcuts (and other settings) will be saved in a `binkybox.config.json` file located in the same directory as the BinkyBox executable.
 
