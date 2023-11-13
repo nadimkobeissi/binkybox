@@ -2,13 +2,13 @@
  * SPDX-License-Identifier: MIT */
 
 use json::object;
+use open;
 use std::sync::mpsc;
 use winsafe::{self as w, co, gui, prelude::*};
 
 use crate::config;
 use crate::keys;
 use crate::tray;
-use crate::util;
 use crate::version;
 
 #[allow(dead_code)]
@@ -244,9 +244,10 @@ impl TabContainerKeyboardShortcuts {
 			Ok(())
 		});
 		self.btn_help.on().bn_clicked(move || {
-			util::open_url(
+			open::that(
 				"https://github.com/nadimkobeissi/binkybox#setting-keyboard-shortcuts",
-			);
+			)
+			.unwrap();
 			Ok(())
 		});
 	}
@@ -280,7 +281,7 @@ impl TabContainerAbout {
 			&wnd,
 			gui::LabelOpts {
 				position: (20, 20),
-				text: format!("BinkyBox {}", version::version()).to_owned(),
+				text: format!("BinkyBox {}", version::VERSION).to_owned(),
 				..Default::default()
 			},
 		);
@@ -312,7 +313,7 @@ impl TabContainerAbout {
 
 	fn events(&self) {
 		self.btn.on().bn_clicked(move || -> w::AnyResult<()> {
-			util::open_url("https://github.com/nadimkobeissi/binkybox");
+			open::that("https://github.com/nadimkobeissi/binkybox").unwrap();
 			Ok(())
 		});
 	}

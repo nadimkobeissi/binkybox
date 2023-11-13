@@ -9,7 +9,6 @@ mod config;
 mod gui;
 mod keys;
 mod tray;
-mod util;
 mod version;
 
 #[tokio::main]

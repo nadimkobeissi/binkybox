@@ -60,9 +60,8 @@ pub fn sanitize_keyboard_shortcut(input: String) -> String {
 }
 
 pub fn check_keyboard_shortcut(input: String) -> bool {
-	let re = Regex::new(
-		r"^((|([LR]CTRL)|([LR]ALT)|([LR]WIN)|([LR]SHIFT))\+){1,4}[A-Z\d]$",
-	);
+	let re =
+		Regex::new(r"^((|([LR]CTRL)|([LR]ALT)|([LR]WIN)|([LR]SHIFT))\+){1,4}[A-Z\d]$");
 	if re.is_err() {
 		return false;
 	}
