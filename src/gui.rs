@@ -3,12 +3,10 @@
 
 use json::object;
 use open;
-use std::sync::mpsc;
 use winsafe::{self as w, co, gui, prelude::*};
 
 use crate::config;
 use crate::keys;
-use crate::tray;
 use crate::version;
 
 #[allow(dead_code)]
@@ -19,7 +17,7 @@ pub struct MainWindow {
 }
 
 impl MainWindow {
-	pub fn new(tx: mpsc::SyncSender<tray::TrayMessage>) -> Self {
+	pub fn new() -> Self {
 		let wnd = gui::WindowMain::new(gui::WindowMainOpts {
 			title: "BinkyBox Settings".to_owned(),
 			class_icon: gui::Icon::Str(winsafe::WString::from_str("icon")),
@@ -35,7 +33,7 @@ impl MainWindow {
 				items: vec![
 					(
 						"Keyboard Shortcuts".to_owned(),
-						Box::new(TabContainerKeyboardShortcuts::new(&wnd, tx)),
+						Box::new(TabContainerKeyboardShortcuts::new(&wnd)),
 					),
 					("About".to_owned(), Box::new(TabContainerAbout::new(&wnd))),
 				],
@@ -58,7 +56,6 @@ impl MainWindow {
 #[derive(Clone)]
 pub struct TabContainerKeyboardShortcuts {
 	wnd: gui::WindowControl,
-	tx: mpsc::SyncSender<tray::TrayMessage>,
 	lbl_0: gui::Label,
 	txt_0: gui::Edit,
 	lbl_1: gui::Label,
@@ -78,7 +75,7 @@ impl GuiTab for TabContainerKeyboardShortcuts {
 }
 
 impl TabContainerKeyboardShortcuts {
-	pub fn new(parent: &impl GuiParent, tx: mpsc::SyncSender<tray::TrayMessage>) -> Self {
+	pub fn new(parent: &impl GuiParent) -> Self {
 		let my_config = config::read();
 		let wnd = gui::WindowControl::new(
 			parent,
@@ -175,7 +172,6 @@ impl TabContainerKeyboardShortcuts {
 		);
 		let new_self = Self {
 			wnd,
-			tx,
 			lbl_0,
 			txt_0,
 			lbl_1,
@@ -234,7 +230,7 @@ impl TabContainerKeyboardShortcuts {
 				}
 			})
 			.unwrap();
-			keys::bind_shortcuts(self_0.tx.clone());
+			keys::bind_shortcuts();
 			w::task_dlg::info(
 				&self_0.wnd.hwnd().GetParent()?,
 				"Success",
@@ -319,12 +315,12 @@ impl TabContainerAbout {
 	}
 }
 
-fn show_gui(tx: mpsc::SyncSender<tray::TrayMessage>) -> w::AnyResult<i32> {
-	MainWindow::new(tx).run().map_err(|err| err.into())
+fn show_gui() -> w::AnyResult<i32> {
+	MainWindow::new().run().map_err(|err| err.into())
 }
 
-pub fn init(tx: mpsc::SyncSender<tray::TrayMessage>) {
-	if let Err(e) = show_gui(tx) {
+pub fn init() {
+	if let Err(e) = show_gui() {
 		w::task_dlg::error(&w::HWND::NULL, "Unhandled error", None, &e.to_string())
 			.unwrap();
 	}

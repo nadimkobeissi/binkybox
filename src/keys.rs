@@ -5,18 +5,16 @@ use inputbot::KeybdKey::{self, *};
 use json::JsonValue;
 use regex::Regex;
 use std::collections::HashMap;
-use std::sync::mpsc;
 use winvd::switch_desktop;
 
 use crate::config;
-use crate::tray;
 
-pub async fn init(tx: mpsc::SyncSender<tray::TrayMessage>) {
-	bind_shortcuts(tx);
+pub async fn init() {
+	bind_shortcuts();
 	inputbot::handle_input_events();
 }
 
-pub fn bind_shortcuts(tx: mpsc::SyncSender<tray::TrayMessage>) {
+pub fn bind_shortcuts() {
 	let my_config = config::read();
 	for (_, value) in key_map() {
 		value.unbind();
@@ -24,16 +22,13 @@ pub fn bind_shortcuts(tx: mpsc::SyncSender<tray::TrayMessage>) {
 	for i in 0..4 {
 		let desktop = format!("desktop_{}", i + 1);
 		let shortcut = process_shortcut(&my_config, &desktop);
-		let tx_clone = tx.clone();
 		if let Some(key_to_bind) = shortcut.get(shortcut.len().saturating_sub(1)) {
-			let tx_clone_inner = tx_clone.clone();
 			key_to_bind.blockable_bind(move || {
 				if shortcut
 					.iter()
 					.take(shortcut.len() - 1)
 					.all(|key| key.is_pressed())
 				{
-					tray::set_icon_num(tx_clone_inner.clone(), i);
 					switch_desktop(i as i32).unwrap();
 					return inputbot::BlockInput::Block;
 				}
@@ -60,8 +55,9 @@ pub fn sanitize_keyboard_shortcut(input: String) -> String {
 }
 
 pub fn check_keyboard_shortcut(input: String) -> bool {
-	let re =
-		Regex::new(r"^((|([LR]CTRL)|([LR]ALT)|([LR]WIN)|([LR]SHIFT))\+){1,4}[A-Z\d]$");
+	let re = Regex::new(
+		r"^((([LR]CTRL)|([LR]ALT)|([LR]WIN)|([LR]SHIFT)|(F\d))\+){1,4}([A-Z\d]|(F\d))$",
+	);
 	if re.is_err() {
 		return false;
 	}
@@ -82,6 +78,18 @@ fn key_map() -> HashMap<&'static str, KeybdKey> {
 		("SHIFT", LShiftKey),
 		("LSHIFT", LShiftKey),
 		("RSHIFT", RShiftKey),
+		("F1", F1Key),
+		("F2", F2Key),
+		("F3", F3Key),
+		("F4", F4Key),
+		("F5", F5Key),
+		("F6", F6Key),
+		("F7", F7Key),
+		("F8", F8Key),
+		("F9", F9Key),
+		("F10", F10Key),
+		("F11", F11Key),
+		("F12", F12Key),
 		("A", AKey),
 		("B", BKey),
 		("C", CKey),
