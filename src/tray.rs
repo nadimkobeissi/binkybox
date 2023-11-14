@@ -41,7 +41,6 @@ pub fn init() {
 async fn icon_change_listener(mut tray: TrayItem) {
 	let (tx, rx) = std::sync::mpsc::channel::<DesktopEvent>();
 	let _notifications_thread = winvd::listen_desktop_events(tx);
-	// Do with receiver something
 	for event in rx {
 		match event {
 			DesktopEvent::DesktopChanged { new: n, old: _ } => match n.get_index() {
