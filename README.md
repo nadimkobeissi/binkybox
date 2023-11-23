@@ -2,7 +2,7 @@
 
 ![Binky](icons/binky.ico)
 
-## The Problem
+## Problem
 
 Windows 10 [introduced virtual desktop support in 2015](https://www.pcworld.com/article/1936035/virtual-desktops-more-space-and-order-with-windows-10-and-11.html). This led to the obsolescence of third-party virtual desktop software, which is a problem, since Windows's native virtual desktop support lacks two very important features:
 
@@ -16,13 +16,13 @@ Indeed, Windows 11 only comes with two shortcuts for navigating virtual desktops
 
 Not only is this ridiculous, but there's no way to add additional shortcuts without writing code that calls Windows's exposed COM API directly.
 
-## The Solution!
+## Solution
 
 **BinkyBox** lets you _hop_ from one desktop to another via keyboard shortcuts and adds a useful system tray icon so you know which desktop you're on. The logo is a cute bunny because bunnies hop. Like you're hopping from one desktop to another. Using keyboard shortcuts. Let's all hop together using BinkyBox.
 
 A "binky" is a word for [a kind of happy hop that bunnies do](https://www.youtube.com/watch?v=y0ivoIr_xnQ).
 
-### Incredible Features:
+### Incredible Features
 
 - Hop from one virtual desktop to another _directly_ using incredible keyboard shortcuts.
 - See which virtual desktop you're on right now via a system tray icon.
@@ -30,7 +30,11 @@ A "binky" is a word for [a kind of happy hop that bunnies do](https://www.youtub
 
 I may add other features later.
 
-## Tested Platforms
+### Feature Requests Welcome
+
+I use BinkyBox daily at work. If you use it a lot too, please don't hesitate to ask for features by opening a GitHub issue. I will likely maintain this software for as long as I continue to use Windows.
+
+### Tested Platforms
 
 | Windows            | Tested     |
 |--------------------|------------|
