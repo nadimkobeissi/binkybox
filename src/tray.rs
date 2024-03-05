@@ -48,6 +48,12 @@ async fn icon_change_listener(mut tray: TrayItem) {
 				Ok(1) => tray.set_icon(IconSource::Resource("num_2")).unwrap(),
 				Ok(2) => tray.set_icon(IconSource::Resource("num_3")).unwrap(),
 				Ok(3) => tray.set_icon(IconSource::Resource("num_4")).unwrap(),
+				Ok(4) => tray.set_icon(IconSource::Resource("icon")).unwrap(),
+				Ok(5) => tray.set_icon(IconSource::Resource("icon")).unwrap(),
+				Ok(6) => tray.set_icon(IconSource::Resource("icon")).unwrap(),
+				Ok(7) => tray.set_icon(IconSource::Resource("icon")).unwrap(),
+				Ok(8) => tray.set_icon(IconSource::Resource("icon")).unwrap(),
+				Ok(9) => tray.set_icon(IconSource::Resource("icon")).unwrap(),
 				_ => {}
 			},
 			_ => {}

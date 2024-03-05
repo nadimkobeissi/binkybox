@@ -11,10 +11,16 @@ use std::io::Write;
 pub fn get_default() -> JsonValue {
 	object! {
 		shortcuts: {
-			desktop_1: "LALT+LSHIFT+1",
-			desktop_2: "LALT+LSHIFT+2",
-			desktop_3: "LALT+LSHIFT+3",
-			desktop_4: "LALT+LSHIFT+4",
+			desktop_1:  "LALT+LSHIFT+1",
+			desktop_2:  "LALT+LSHIFT+2",
+			desktop_3:  "LALT+LSHIFT+3",
+			desktop_4:  "LALT+LSHIFT+4",
+			desktop_5:  "LALT+LSHIFT+5",
+			desktop_6:  "LALT+LSHIFT+6",
+			desktop_7:  "LALT+LSHIFT+7",
+			desktop_8:  "LALT+LSHIFT+8",
+			desktop_9:  "LALT+LSHIFT+9",
+			desktop_10: "LALT+LSHIFT+0",
 		}
 	}
 }
