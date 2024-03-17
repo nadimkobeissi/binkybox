@@ -5,7 +5,7 @@ use inputbot::KeybdKey::{self, *};
 use json::JsonValue;
 use regex::Regex;
 use std::collections::HashMap;
-use winvd::switch_desktop;
+use winvd::{switch_desktop, get_desktop_count};
 
 use crate::config;
 
@@ -19,7 +19,7 @@ pub fn bind_shortcuts() {
 	for (_, value) in key_map() {
 		value.unbind();
 	}
-	for i in 0..4 {
+	for i in 0..10 {
 		let desktop = format!("desktop_{}", i + 1);
 		let shortcut = process_shortcut(&my_config, &desktop);
 		if let Some(key_to_bind) = shortcut.get(shortcut.len().saturating_sub(1)) {
@@ -29,7 +29,10 @@ pub fn bind_shortcuts() {
 					.take(shortcut.len() - 1)
 					.all(|key| key.is_pressed())
 				{
-					switch_desktop(i as i32).unwrap();
+					// Ignore desktops that aren't configured.
+					if i < get_desktop_count().unwrap() {
+						switch_desktop(i as i32).unwrap();
+					}
 					return inputbot::BlockInput::Block;
 				}
 				return inputbot::BlockInput::DontBlock;
