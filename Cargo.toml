@@ -11,6 +11,9 @@ publish = false
 lto = "fat"
 opt-level = 3
 strip = "symbols"
+codegen-units = 1
+debug = false
+panic = "abort"
 
 [dependencies]
 winvd = "0.0.46"
