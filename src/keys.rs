@@ -5,7 +5,6 @@ use inputbot::KeybdKey::{self, *};
 use json::JsonValue;
 use regex::Regex;
 use std::collections::HashMap;
-use winvd::switch_desktop;
 
 use crate::config;
 
@@ -29,11 +28,29 @@ pub fn bind_shortcuts() {
 					.take(shortcut.len() - 1)
 					.all(|key| key.is_pressed())
 				{
-					switch_desktop(i as i32).unwrap();
+					switch_to_desktop(i, 0);
 					return inputbot::BlockInput::Block;
 				}
 				return inputbot::BlockInput::DontBlock;
 			});
+		}
+	}
+}
+
+fn switch_to_desktop(desktop: u32, tries: u8) {
+	if tries < 10 {
+		match winvd::switch_desktop(desktop) {
+				Ok(_) => {}
+				Err(_) => {
+					match winvd::create_desktop() {
+						Ok(_) => {
+							switch_to_desktop(desktop, tries + 1);
+						}
+						Err(e) => {
+							println!("Error: {:?}", e);
+					}
+				}
+			}
 		}
 	}
 }
