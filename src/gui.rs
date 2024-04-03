@@ -2,7 +2,6 @@
  * SPDX-License-Identifier: MIT */
 
 use json::object;
-use open;
 use winsafe::{self as w, co, gui, prelude::*};
 
 use crate::config;
