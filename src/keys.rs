@@ -18,7 +18,7 @@ pub fn bind_shortcuts() {
 	for (_, value) in key_map().iter() {
 		value.unbind();
 	}
-	for i in 0..4 {
+	for i in 0..8 {
 		let shortcut = process_shortcut(&my_config, i);
 		if let Some(key_to_bind) = shortcut.get(shortcut.len().saturating_sub(1)) {
 			key_to_bind.blockable_bind(move || {
@@ -42,7 +42,7 @@ pub fn bind_shortcuts() {
 }
 
 fn switch_to_desktop(desktop: u32, tries: u8) {
-	if tries < 10 {
+	if tries <= 10 {
 		match winvd::switch_desktop(desktop) {
 				Ok(_) => {}
 				Err(_) => {

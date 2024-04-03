@@ -20,7 +20,7 @@ impl MainWindow {
 		let wnd = gui::WindowMain::new(gui::WindowMainOpts {
 			title: "BinkyBox Settings".to_owned(),
 			class_icon: gui::Icon::Str(winsafe::WString::from_str("icon")),
-			size: (300, 350),
+			size: (450, 350),
 			style: gui::WindowMainOpts::default().style | co::WS::MINIMIZEBOX,
 			..Default::default()
 		});
@@ -28,7 +28,7 @@ impl MainWindow {
 			&wnd,
 			gui::TabOpts {
 				position: (10, 10),
-				size: (280, 330),
+				size: (430, 330),
 				items: vec![
 					(
 						"Keyboard Shortcuts".to_owned(),
@@ -63,6 +63,14 @@ pub struct TabContainerKeyboardShortcuts {
 	txt_2: gui::Edit,
 	lbl_3: gui::Label,
 	txt_3: gui::Edit,
+	lbl_4: gui::Label,
+	txt_4: gui::Edit,
+	lbl_5: gui::Label,
+	txt_5: gui::Edit,
+	lbl_6: gui::Label,
+	txt_6: gui::Edit,
+	lbl_7: gui::Label,
+	txt_7: gui::Edit,
 	btn_set: gui::Button,
 	btn_help: gui::Button,
 }
@@ -151,6 +159,74 @@ impl TabContainerKeyboardShortcuts {
 				..Default::default()
 			},
 		);
+		let lbl_4 = gui::Label::new(
+			&wnd,
+			gui::LabelOpts {
+				position: (220, 20),
+				text: "Switch to Desktop 5".to_owned(),
+				..Default::default()
+			},
+		);
+		let txt_4 = gui::Edit::new(
+			&wnd,
+			gui::EditOpts {
+				position: (220, 40),
+				width: 180,
+				text: my_config["shortcuts"]["desktop_5"].to_string().to_owned(),
+				..Default::default()
+			},
+		);
+		let lbl_5 = gui::Label::new(
+			&wnd,
+			gui::LabelOpts {
+				position: (220, 80),
+				text: "Switch to Desktop 6".to_owned(),
+				..Default::default()
+			},
+		);
+		let txt_5 = gui::Edit::new(
+			&wnd,
+			gui::EditOpts {
+				position: (220, 100),
+				width: 180,
+				text: my_config["shortcuts"]["desktop_6"].to_string().to_owned(),
+				..Default::default()
+			},
+		);
+		let lbl_6 = gui::Label::new(
+			&wnd,
+			gui::LabelOpts {
+				position: (220, 140),
+				text: "Switch to Desktop 7".to_owned(),
+				..Default::default()
+			},
+		);
+		let txt_6 = gui::Edit::new(
+			&wnd,
+			gui::EditOpts {
+				position: (220, 160),
+				width: 180,
+				text: my_config["shortcuts"]["desktop_7"].to_string().to_owned(),
+				..Default::default()
+			},
+		);
+		let lbl_7 = gui::Label::new(
+			&wnd,
+			gui::LabelOpts {
+				position: (220, 200),
+				text: "Switch to Desktop 8".to_owned(),
+				..Default::default()
+			},
+		);
+		let txt_7 = gui::Edit::new(
+			&wnd,
+			gui::EditOpts {
+				position: (220, 220),
+				width: 180,
+				text: my_config["shortcuts"]["desktop_8"].to_string().to_owned(),
+				..Default::default()
+			},
+		);
 		let btn_set = gui::Button::new(
 			&wnd,
 			gui::ButtonOpts {
@@ -179,6 +255,14 @@ impl TabContainerKeyboardShortcuts {
 			txt_2,
 			lbl_3,
 			txt_3,
+			lbl_4,
+			txt_4,
+			lbl_5,
+			txt_5,
+			lbl_6,
+			txt_6,
+			lbl_7,
+			txt_7,
 			btn_set,
 			btn_help,
 		};
@@ -188,12 +272,16 @@ impl TabContainerKeyboardShortcuts {
 	fn events(&self) {
 		let self_0 = self.clone();
 		self.btn_set.on().bn_clicked(move || {
-			for i in 0..4 {
+			for i in 0..8 {
 				let shortcut_sanitized = keys::sanitize_keyboard_shortcut(match i {
 					0 => self_0.txt_0.text(),
 					1 => self_0.txt_1.text(),
 					2 => self_0.txt_2.text(),
-					_ => self_0.txt_3.text(),
+					3 => self_0.txt_3.text(),
+					4 => self_0.txt_4.text(),
+					5 => self_0.txt_5.text(),
+					6 => self_0.txt_6.text(),
+					_ => self_0.txt_7.text(),
 				});
 				if !keys::check_keyboard_shortcut(shortcut_sanitized) {
 					w::task_dlg::error(
@@ -220,12 +308,28 @@ impl TabContainerKeyboardShortcuts {
 			self_0
 				.txt_3
 				.set_text(keys::sanitize_keyboard_shortcut(self_0.txt_3.text()).as_str());
+			self_0
+				.txt_4
+				.set_text(keys::sanitize_keyboard_shortcut(self_0.txt_4.text()).as_str());
+			self_0
+				.txt_5
+				.set_text(keys::sanitize_keyboard_shortcut(self_0.txt_5.text()).as_str());
+			self_0
+				.txt_6
+				.set_text(keys::sanitize_keyboard_shortcut(self_0.txt_6.text()).as_str());
+			self_0
+				.txt_7
+				.set_text(keys::sanitize_keyboard_shortcut(self_0.txt_7.text()).as_str());
 			config::write(object! {
 				shortcuts: {
 					desktop_1: self_0.txt_0.text(),
 					desktop_2: self_0.txt_1.text(),
 					desktop_3: self_0.txt_2.text(),
 					desktop_4: self_0.txt_3.text(),
+					desktop_5: self_0.txt_4.text(),
+					desktop_6: self_0.txt_5.text(),
+					desktop_7: self_0.txt_6.text(),
+					desktop_8: self_0.txt_7.text(),
 				}
 			})
 			.unwrap();
