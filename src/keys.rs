@@ -15,12 +15,11 @@ pub async fn init() {
 
 pub fn bind_shortcuts() {
 	let my_config = config::read();
-	for (_, value) in key_map() {
+	for (_, value) in key_map().iter() {
 		value.unbind();
 	}
 	for i in 0..4 {
-		let desktop = format!("desktop_{}", i + 1);
-		let shortcut = process_shortcut(&my_config, &desktop);
+		let shortcut = process_shortcut(&my_config, i);
 		if let Some(key_to_bind) = shortcut.get(shortcut.len().saturating_sub(1)) {
 			key_to_bind.blockable_bind(move || {
 				if shortcut
@@ -28,6 +27,11 @@ pub fn bind_shortcuts() {
 					.take(shortcut.len() - 1)
 					.all(|key| key.is_pressed())
 				{
+					for (_, value) in key_map().iter() {
+						if value.is_pressed() && !shortcut.contains(value) {
+							return inputbot::BlockInput::DontBlock;
+						}
+					}
 					switch_to_desktop(i, 0);
 					return inputbot::BlockInput::Block;
 				}
@@ -55,12 +59,13 @@ fn switch_to_desktop(desktop: u32, tries: u8) {
 	}
 }
 
-fn process_shortcut(config: &JsonValue, desktop: &str) -> Vec<KeybdKey> {
+fn process_shortcut(config: &JsonValue, desktop: u32) -> Vec<KeybdKey> {
+	let desktop_str = format!("desktop_{}", desktop + 1);
 	let shortcut_sanitized =
-		sanitize_keyboard_shortcut(config["shortcuts"][desktop].to_string());
+		sanitize_keyboard_shortcut(config["shortcuts"][&desktop_str].to_string());
 	let shortcut_string = match check_keyboard_shortcut(shortcut_sanitized.clone()) {
 		true => shortcut_sanitized,
-		false => config::get_default()["shortcuts"][desktop].to_string(),
+		false => config::get_default()["shortcuts"][&desktop_str].to_string(),
 	};
 	build_keyboard_shortcut(shortcut_string.as_str())
 }
