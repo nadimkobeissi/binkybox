@@ -3,6 +3,11 @@ num_1 ICON "icons/num_1.ico"
 num_2 ICON "icons/num_2.ico"
 num_3 ICON "icons/num_3.ico"
 num_4 ICON "icons/num_4.ico"
+num_5 ICON "icons/num_5.ico"
+num_6 ICON "icons/num_6.ico"
+num_7 ICON "icons/num_7.ico"
+num_8 ICON "icons/num_8.ico"
+num_9 ICON "icons/num_9.ico"
 
 #define RT_MANIFEST 24
 1 RT_MANIFEST "binkybox.exe.manifest"

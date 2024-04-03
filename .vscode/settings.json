@@ -2,5 +2,6 @@
 	"rust-analyzer.linkedProjects": [
 		".\\Cargo.toml",
 		".\\Cargo.toml"
-	]
+	],
+	"C_Cpp.dimInactiveRegions": false
 }
