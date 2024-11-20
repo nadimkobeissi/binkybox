@@ -79,6 +79,11 @@ You can make BinkyBox start automatically on Windows startup when you log in:
 2. Press _Win+R_ to open Run, and type in `shell:common startup`.
 3. Paste the BinkyBox shortcut you created in Step 1 inside the resulting Startup folder.
 
+## Programs with Elevated Privileges
+
+Hotkeys may not be captured or processed if the currently focused program is running with elevated privileges (admin rights) while BinkyBox is running with normal user privileges.
+A suggested workaround is to run BinkyBox with elevated privileges (as admin) as well.
+
 ## License and Author
 
 License: MIT. Author: [Nadim Kobeissi](https://nadim.computer)
