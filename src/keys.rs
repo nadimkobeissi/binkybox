@@ -7,6 +7,17 @@ use regex::Regex;
 use std::collections::HashMap;
 use lazy_static::lazy_static;
 
+use windows::{
+    Win32::{
+        Foundation::*,
+        UI::WindowsAndMessaging::*,
+        UI::Controls::STATE_SYSTEM_INVISIBLE,
+    },
+};
+
+use std::ffi::OsString;
+use std::os::windows::ffi::OsStringExt;
+
 use crate::config;
 
 lazy_static! {
@@ -110,10 +121,56 @@ pub fn bind_shortcuts() {
 	}
 }
 
+unsafe extern "system" fn enum_windows_and_switch_app_focus(hwnd: HWND, _lparam: LPARAM) -> BOOL {
+    // remove not visible windows
+    if IsWindowVisible(hwnd) == false {
+        return BOOL(1);
+    }
+
+    // remove windows with invisible title bar
+    let mut ti = TITLEBARINFO {
+        cbSize: std::mem::size_of::<TITLEBARINFO>() as u32,
+        rcTitleBar: RECT {left: 0, top: 0, right: 0, bottom: 0},
+        rgstate: [0; 6],
+    };
+    let _ = GetTitleBarInfo(hwnd, &mut ti);
+    if ti.rgstate[0] & STATE_SYSTEM_INVISIBLE.0 > 0 {
+        return BOOL(1);
+    }
+
+    // remove "floating toolbar" windows that are not visible in alt+tab
+    if WINDOW_EX_STYLE(GetWindowLongW(hwnd, GWL_EXSTYLE).try_into().unwrap()) & WS_EX_TOOLWINDOW != WINDOW_EX_STYLE(0) {
+        return BOOL(1);
+    }
+
+    // remove windows with empty title bar
+    // + Settings window, for some reason this window is focused on empty desktops even if it is
+    //   not opened or visible in alt+tab or taskbar
+    let mut buffer: [u16; 256] = [0; 256];
+    GetWindowTextW(hwnd, &mut buffer);
+    let window_title = OsString::from_wide(&buffer).to_string_lossy().into_owned();
+    if window_title.is_empty() || window_title.contains("Settings") {
+        return BOOL(1)
+    }
+
+    // remove windows that are not in the current virtual desktop
+    let is_on_current_desktop = winvd::is_window_on_current_desktop(hwnd as windows::Win32::Foundation::HWND).unwrap();
+    if !is_on_current_desktop {
+        return BOOL(1)
+    }
+
+    let _ = SetForegroundWindow(hwnd);
+    return BOOL(0); // Stop enumeration
+}
+
 fn switch_to_desktop(desktop: u32, tries: u8) {
 	if tries <= 10 {
 		match winvd::switch_desktop(desktop) {
-				Ok(_) => {}
+				Ok(_) => {
+                    unsafe {
+                        let _ = EnumWindows(Some(enum_windows_and_switch_app_focus), LPARAM {0: 0} );
+                    }
+                }
 				Err(_) => {
 					match winvd::create_desktop() {
 						Ok(_) => {
