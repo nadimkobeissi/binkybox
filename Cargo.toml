@@ -1,6 +1,6 @@
 [package]
 name = "binkybox"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 authors = ["Nadim Kobeissi <nadim@symbolic.software>"]
 publish = false
@@ -25,7 +25,7 @@ json = "0.12.4"
 open = "5.0.0"
 inputbot = "0.6.0"
 lazy_static = "1.4.0"
-windows = { version = "0.58", features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging", "Win32_UI_Controls", "Win32_System_Console"] }
+windows = { version = "0.61.1", features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging", "Win32_UI_Controls", "Win32_System_Console"] }
 
 [build-dependencies]
 embed-resource = "2.4.0"
