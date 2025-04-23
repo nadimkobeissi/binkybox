@@ -26,6 +26,8 @@ open = "5.0.0"
 inputbot = "0.6.0"
 lazy_static = "1.4.0"
 windows = { version = "=0.58", features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging", "Win32_UI_Controls", "Win32_System_Console"] }
+log = "0.4.27"
+simple_logger = { version = "5.0.0", features = ["stderr", "timestamps"] }
 
 [build-dependencies]
 embed-resource = "2.4.0"
